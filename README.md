@@ -1,2 +1,2 @@
 # GA-Project-5
-This project will focus on voter suppression laws
+This Project will focus on Predicting the gubenatorial election in California
