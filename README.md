@@ -1,13 +1,13 @@
 **WAM! News Election Prognostication Proposal**
 
-Wassie, Mekdes
-Aziz, Zaid
-Morgen, Nadia
+Mekdes Wassie, Zaid Aziz & Nadia Morgen
 
 **Problem Statement (Goal)**
+
 Can we create a model that more accurately predicts the outcome of the 2021 California gubernatorial recall election?
 
 **Executive Summary**
+
 Californians recently voted decisively not to recall Governor Gavin Newsom.  Yet many pollsters and pundits predicted the election would be a squeaker.  An August SurveyUSA poll sponsored by the San Diego Tribune, KABC-TV Los Angeles, and KGTV-TV San Diego found that 51% of likely voters would vote to recall Gov. Newsom, while 40% would vote no.  This ignited a rigorous fundraising and PR campaign for Newsom.  Why did the results differ so much from the prognostications, especially earlier prognostications?  Is modern polling plagued by the lack of land lines that made random sampling easier?  Did pollsters use the wrong metrics?  Or did pollsters miss some key metrics?
 
 At WAM! News, we are trying to develop a more accurate model than our competitors. Using the CCES Dataset from Harvard University, we will build a classification model that accurately classifies and predicts CA’s gubernatorial preferences. The model will be evaluated based on accuracy, specificity, and recall, with the goal of trying to get achieving higher accuracy than the null model and our competitors.
@@ -17,9 +17,11 @@ Although telephone polling has known methodological limitations, machine learnin
 Note that in 2021, voters voted on whether or not to recall Governor Newsom.  Therefore, our models are all classification models.  Since voters definitely chose not to recall the Governor, there was never an election to choose a new governor.
 
 **1. Sample Information**
+
 We used data from the Cooperative Election Study(CES), publicly available at https://cces.gov.harvard.edu/data.  The dataset includes national and some state polling data for 2006-2020.  Although our focus is the 2021 gubernatorial recall election in California, we examined demographic data for 2016-2020, as we suspected that shifting demographics might play a partial role.
 
 Summary of CCES Sampling Methodology
+
 The CCES employs sample matching, meaning they draw their sample randomly, with the goal of matching the target population.  In this case, the target population is California residents, aged 18 and older.  The investigators also used a pool of opt-in respondents to ensure that their sample matched the demographics of adult Californians at large.  Details on this process are available in the CCES Guide 2020 available at https://cces.gov.harvard.edu/data.
 
 The data are also weighted to adjust for any remaining imbalances.  The dataframe used to match the data come from the American Community Study (ACS) conducted by the Census Bureau.  Demographers consider the ACS a highly reputable  and reliable data source.
@@ -38,6 +40,7 @@ https://doi.org/10.7910/DVN/E9N6PH
 doi/10.7910/DVN/E9N6PH
 
 **2. CCES Data Summaries**
+
 Since the CES is a national survey, we used a subset of it, specifically, California residents between 2016-2020.
 
 Our annual n's are as follows:
@@ -62,6 +65,7 @@ The gubernatorial race stands out as having a negative bias.  This means the mod
 All data shown have 95% confidence intervals.  All respondents were validated registered voters in California.
 
 **3. Data Dictionary**
+
 We used the following variables:
 
 Variable Name | Data Type   | Description                             
@@ -84,6 +88,7 @@ Variable Name | Data Type   | Description
 The full data dictionary and guide to the dataset is available at https://dataverse.harvard.edu/file.xhtml?fileId=4498854&version=6.0.
 
 **4. Required Software**
+
 We used the following software and python libraries for our analysis:
 | Author     | Library        | Module
 | ------------| ---------------| -------------------------
@@ -105,11 +110,12 @@ We used the following software and python libraries for our analysis:
 | tensorflow  | keras.metrics  | Recall
 | tensorflow  | keras.models   | Sequential
 | tensorflow  | keras.utils    | to_categorical
-| tensorflow  | keras.wrappers.scikit_learn | KerasClassifier
+
 
 We dropped the 14 respondents who voted for third party candidates because they comprised a very small percentage of respondents.  Although it would behoove candidates to court third party voters in a tight race, we would need evidence that they would be open to voting for a democrat or republican, as well as some indication of which party they would choose.  We lack that information in the current dataset.  We also dropped those who responded "Not sure" (n = 25) or "I didn't vote in this race" (n = 37).
 
 **5. Exploratory Data Analysis**
+
 We found several interesting and possibly explanatory changes in demographics between 2016 and 2020:
 * Median age decreased from 47 to 45
 * The percentage of married respondents dropped from 49.7% to 42.0%.
@@ -129,6 +135,7 @@ The final demographic that changed was political ideology.  Respondents were ask
 Since moderates and unsures are the most difficult voters to predict, any changes in their numbers affect prognostications.
 
 **6. Models**
+
 Caffaro employed a neural network to calculate his predictions.  We employed the same neural net that he did, as well as several other models.  Specifically:
 1. Logistic Regression with GridSearch
 2. KNN with GridSearch
@@ -138,10 +145,12 @@ Caffaro employed a neural network to calculate his predictions.  We employed the
 6. Neural Network
 
 **Why We Chose These Models**
+
 We began with logistic regression, KNN, and multinomial naive Bayes, with GridSearch.  Then we employed  VotingClassifier to utilize ensemble learning.  Logistic regression is simple and easily interpretable, so it makes a good starting point.  Next we tried a random forest classifier, and finally a neural network.
 
 
 **Best Models**
+
 1. Voting Classifier with Logistic Regression, multinomial naive Bayes, and KNN Classfier
 2. Random Forest with Bootstrap
 3. Neural Network with Early Stopping
@@ -158,6 +167,7 @@ This model had a max depth of 6, max features of 0.5, and 100 estimators.
 We chose this model as the best model because it had similar metrics as the neural network, but it was the least overfit and the easiest to interpret.
 
 **Top 10 Features (Random Forest Model):**
+
 1. Strongly disapprove of the governor
 2. Republican (pid3)
 3. Liberal (ideo5)
@@ -170,9 +180,11 @@ We chose this model as the best model because it had similar metrics as the neur
 
 
 **Model Validation on 2021 Recall Election**
+
 Finally, we tested our model on unseen data from 2020 as a way of predicting the 2021 gubernatorial recall election.  2021 data were unavailable.  Our model predicted that 68.7% of voters would vote no on the recall, and 31.3% of voters would vote to recall the Governor.  As of now, 62% of voters voted against the recall and 38% voted for it.  Since our model was trained on 2018 data and tested on 2020 data, we are pleased with our results.
 
 **Limitations**
+
 California is a liberal state, so predicting the outcome of a statewide election might seem easy.  We chose California because it had sufficient data.  We can't forecast election results, like most pollsters do, because we lack the right data.  We would need very current data to do this.  We were also limited to data available at no cost.
 
 **Conclusions & Recommendations**
